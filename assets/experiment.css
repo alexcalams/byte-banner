@@ -345,6 +345,7 @@
 
 .exp-sticky-b-inner {
   display: flex;
+  position: relative;
   width: 100%;
   align-items: center;
   gap: 0.75rem 1rem;
@@ -388,6 +389,7 @@
     align-items: flex-start;
     gap: 1rem 0.75rem;
     padding: 1rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
   }
 
   .exp-sticky-b .exp-icon-tile {
@@ -396,16 +398,27 @@
 
   .exp-sticky-b .exp-copy {
     flex: 1 1 calc(100% - 3rem);
+    padding-right: 1.75rem; /* keep title clear of top-right dismiss */
   }
 
   .exp-sticky-b-actions {
     flex: 1 1 100%;
     justify-content: stretch;
-    padding-left: calc(2.25rem + 0.75rem); /* align under copy, past icon */
+    padding-left: 0;
+    gap: 0;
+  }
+
+  /* Park dismiss in the top-right of the bar; CTA takes the full row. */
+  .exp-sticky-b-actions .exp-dismiss {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.5rem;
+    z-index: 1;
   }
 
   .exp-sticky-b-actions .exp-btn-primary {
-    flex: 1;
+    flex: 1 1 100%;
+    width: 100%;
   }
 }
 
@@ -417,20 +430,31 @@
       align-items: flex-start;
       gap: 1rem 0.75rem;
       padding: 1rem;
+      padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
     }
 
     .exp-sticky-b .exp-copy {
       flex: 1 1 calc(100% - 3rem);
+      padding-right: 1.75rem;
     }
 
     .exp-sticky-b-actions {
       flex: 1 1 100%;
       justify-content: stretch;
-      padding-left: calc(2.25rem + 0.75rem);
+      padding-left: 0;
+      gap: 0;
+    }
+
+    .exp-sticky-b-actions .exp-dismiss {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.5rem;
+      z-index: 1;
     }
 
     .exp-sticky-b-actions .exp-btn-primary {
-      flex: 1;
+      flex: 1 1 100%;
+      width: 100%;
     }
   }
 }
