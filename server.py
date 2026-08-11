@@ -15,6 +15,8 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / "assets"
+EXPERIMENTS = ROOT / "experiments"
+DOCS_DIR = ROOT / "docs"
 DOCS_ORIGIN = "https://elevenlabs.io"
 DEFAULT_DOCS_PATH = "/docs/overview/capabilities/text-to-speech"
 INJECT_MARK = "<!-- cta-experiment -->"
@@ -108,7 +110,72 @@ class Handler(BaseHTTPRequestHandler):
             self._serve_local(path[len("/assets/") :], body=body)
             return
 
+        if path.startswith("/experiments"):
+            self._serve_experiments(path, body=body)
+            return
+
+        if path == "/matrix" or path == "/matrix.md":
+            self._serve_file(
+                DOCS_DIR / "elevenapi-landing-archetype-experiment-matrix.md",
+                body=body,
+            )
+            return
+
+        # Friendly aliases matching the matrix path convention.
+        if path.startswith("/api/"):
+            self._serve_api_alias(path[len("/api/") :], body=body)
+            return
+
         self._proxy(body=body)
+
+    def _serve_file(self, file_path: Path, body: bool = True, content_type: str | None = None) -> None:
+        if not file_path.is_file():
+            self.send_error(404, f"Not found: {file_path.name}")
+            return
+        data = file_path.read_bytes()
+        ctype = content_type or mimetypes.guess_type(str(file_path))[0] or "application/octet-stream"
+        if file_path.suffix == ".md":
+            ctype = "text/markdown; charset=utf-8"
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-cache")
+        self.end_headers()
+        if body:
+            self.wfile.write(data)
+
+    def _serve_experiments(self, path: str, body: bool = True) -> None:
+        rel = path[len("/experiments") :].lstrip("/")
+        if ".." in rel.split("/"):
+            self.send_error(400, "Invalid path")
+            return
+        if rel in {"", "index.html"}:
+            self._serve_file(EXPERIMENTS / "index.html", body=body, content_type="text/html; charset=utf-8")
+            return
+        candidate = EXPERIMENTS / rel
+        if candidate.is_dir():
+            candidate = candidate / "index.html"
+        elif candidate.suffix == "":
+            html_candidate = candidate.with_suffix(".html")
+            if html_candidate.is_file():
+                candidate = html_candidate
+        self._serve_file(
+            candidate,
+            body=body,
+            content_type="text/html; charset=utf-8" if candidate.suffix == ".html" else None,
+        )
+
+    def _serve_api_alias(self, rel: str, body: bool = True) -> None:
+        """Map /api/{product}/{q1|q2|ud|d} → experiments pages."""
+        rel = rel.strip("/")
+        if ".." in rel.split("/"):
+            self.send_error(400, "Invalid path")
+            return
+        parts = [p for p in rel.split("/") if p]
+        if len(parts) == 2 and parts[1] in {"q1", "q2", "ud", "d"}:
+            self._serve_experiments(f"/experiments/{parts[0]}/{parts[1]}", body=body)
+            return
+        self.send_error(404, "Unknown experiment alias")
 
     def _serve_root(self, body: bool = True) -> None:
         file_path = ROOT / "index.html"
@@ -224,6 +291,7 @@ def main() -> None:
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(
         f"CTA experiment on http://{args.host}:{args.port}/\n"
+        f"API LP experiments on http://{args.host}:{args.port}/experiments/\n"
         f"Proxying live docs from {DOCS_ORIGIN}{DEFAULT_DOCS_PATH}"
     )
     try:
