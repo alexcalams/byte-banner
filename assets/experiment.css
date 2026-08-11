@@ -1,0 +1,558 @@
+/* CTA Experiment Lab — mirrors original Figma Make styles */
+
+:root {
+  --exp-neutral-950: #0a0a0a;
+  --exp-neutral-900: #171717;
+  --exp-neutral-800: #262626;
+  --exp-neutral-700: #404040;
+  --exp-neutral-500: #737373;
+  --exp-neutral-400: #a3a3a3;
+  --exp-neutral-300: #d4d4d4;
+  --exp-emerald-400: #34d399;
+  --exp-emerald-300: #6ee7b7;
+  --exp-white: #ffffff;
+}
+
+.exp-reset,
+.exp-reset * {
+  box-sizing: border-box;
+}
+
+.exp-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.exp-icon-lg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.exp-icon-tile {
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--exp-emerald-400) 10%, transparent);
+  color: var(--exp-emerald-400);
+}
+
+.exp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--exp-emerald-400);
+  color: var(--exp-neutral-900);
+  font-size: 14px;
+  line-height: 1.25rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.exp-btn-primary:hover {
+  background: var(--exp-emerald-300);
+}
+
+.exp-btn-primary .exp-arrow {
+  transition: transform 150ms ease;
+}
+
+.exp-btn-primary:hover .exp-arrow {
+  transform: translateX(2px);
+}
+
+.exp-btn-primary.full {
+  width: 100%;
+}
+
+.exp-dismiss {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 0.375rem;
+  padding: 0.375rem;
+  background: transparent;
+  color: var(--exp-neutral-500);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.exp-dismiss:hover {
+  background: color-mix(in srgb, var(--exp-white) 10%, transparent);
+  color: var(--exp-neutral-300);
+}
+
+/* —— Experiment panel —— */
+.exp-panel {
+  position: fixed;
+  left: 1.25rem;
+  top: 5rem;
+  z-index: 2147483000;
+  width: 18rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--exp-neutral-800);
+  background: var(--exp-neutral-900);
+  color: var(--exp-white);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.45);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.25rem;
+}
+
+.exp-panel-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.exp-panel-toggle:hover {
+  background: var(--exp-neutral-800);
+}
+
+.exp-panel-toggle .exp-chevron {
+  margin-left: auto;
+  transition: transform 150ms ease;
+}
+
+.exp-panel.collapsed .exp-chevron {
+  transform: rotate(-90deg);
+}
+
+.exp-panel-body {
+  border-top: 1px solid var(--exp-neutral-800);
+  padding: 0.75rem;
+}
+
+.exp-panel.collapsed .exp-panel-body {
+  display: none;
+}
+
+.exp-label {
+  margin-bottom: 0.5rem;
+  padding: 0 0.25rem;
+  color: var(--exp-neutral-400);
+}
+
+.exp-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.exp-variant {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  border: 1px solid var(--exp-neutral-800);
+  background: transparent;
+  color: inherit;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.exp-variant:hover {
+  border-color: var(--exp-neutral-700);
+  background: var(--exp-neutral-800);
+}
+
+.exp-variant.active {
+  border-color: color-mix(in srgb, var(--exp-emerald-400) 50%, transparent);
+  background: color-mix(in srgb, var(--exp-emerald-400) 10%, transparent);
+}
+
+.exp-variant strong {
+  color: var(--exp-white);
+  font-weight: 500;
+}
+
+.exp-variant span {
+  color: var(--exp-neutral-400);
+  font-weight: 400;
+}
+
+.exp-scroll-meta {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--exp-neutral-800);
+  padding-top: 0.75rem;
+}
+
+.exp-scroll-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.375rem;
+  padding: 0 0.25rem;
+  color: var(--exp-neutral-400);
+}
+
+.exp-scroll-row .exp-scroll-value {
+  color: var(--exp-white);
+}
+
+.exp-scroll-track {
+  margin: 0 0.25rem;
+  height: 0.375rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--exp-neutral-800);
+}
+
+.exp-scroll-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 9999px;
+  background: var(--exp-emerald-400);
+  transition: width 150ms ease;
+}
+
+.exp-note {
+  margin: 0.5rem 0.25rem 0;
+  color: var(--exp-neutral-500);
+  font-size: 14px;
+}
+
+.exp-note code {
+  color: var(--exp-neutral-300);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+/* —— Shared CTA card shell —— */
+.exp-cta-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--exp-neutral-800);
+  background: var(--exp-neutral-900);
+  color: var(--exp-white);
+  padding: 1.25rem;
+  transition: border-color 150ms ease;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.exp-cta-card:hover {
+  border-color: var(--exp-neutral-700);
+}
+
+.exp-cta-title {
+  font-size: 16px;
+  line-height: 1.5rem;
+  color: var(--exp-white);
+}
+
+.exp-cta-sub {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.25rem;
+  color: var(--exp-neutral-400);
+}
+
+.exp-cta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* A — above-the-fold banner */
+.exp-slot-a {
+  margin: 0 0 1.5rem;
+  width: 100%;
+}
+
+.exp-cta-a {
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .exp-cta-a {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .exp-cta-a .exp-btn-primary {
+    flex-shrink: 0;
+  }
+}
+
+/* B — sticky bottom bar (adapts to its own width, never ellipsizes copy) */
+.exp-sticky-b {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2147482900;
+  container-type: inline-size;
+  container-name: exp-sticky-b;
+  border-top: 1px solid var(--exp-neutral-800);
+  background: var(--exp-neutral-900);
+  color: var(--exp-white);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.exp-sticky-b-inner {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+}
+
+.exp-sticky-b .exp-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.exp-sticky-b .exp-cta-title {
+  font-size: 16px;
+  line-height: 1.45;
+  overflow: visible;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.exp-sticky-b .exp-cta-sub {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow: visible;
+  white-space: normal;
+}
+
+.exp-sticky-b-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Narrow bar (mobile iframe / small desktop): stack copy above CTA */
+@container exp-sticky-b (max-width: 719px) {
+  .exp-sticky-b-inner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1rem 0.75rem;
+    padding: 1rem;
+  }
+
+  .exp-sticky-b .exp-icon-tile {
+    margin-top: 0.125rem;
+  }
+
+  .exp-sticky-b .exp-copy {
+    flex: 1 1 calc(100% - 3rem);
+  }
+
+  .exp-sticky-b-actions {
+    flex: 1 1 100%;
+    justify-content: stretch;
+    padding-left: calc(2.25rem + 0.75rem); /* align under copy, past icon */
+  }
+
+  .exp-sticky-b-actions .exp-btn-primary {
+    flex: 1;
+  }
+}
+
+/* Fallback when container queries aren't available */
+@supports not (container-type: inline-size) {
+  @media (max-width: 719px) {
+    .exp-sticky-b-inner {
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 1rem 0.75rem;
+      padding: 1rem;
+    }
+
+    .exp-sticky-b .exp-copy {
+      flex: 1 1 calc(100% - 3rem);
+    }
+
+    .exp-sticky-b-actions {
+      flex: 1 1 100%;
+      justify-content: stretch;
+      padding-left: calc(2.25rem + 0.75rem);
+    }
+
+    .exp-sticky-b-actions .exp-btn-primary {
+      flex: 1;
+    }
+  }
+}
+
+/* C — scroll-depth card */
+.exp-scroll-c {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 2147482900;
+  width: 360px;
+  max-width: calc(100vw - 2.5rem);
+  border-radius: 1rem;
+  border: 1px solid var(--exp-neutral-800);
+  background: var(--exp-neutral-900);
+  color: var(--exp-white);
+  padding: 1.25rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.45);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  transition: transform 500ms ease, opacity 500ms ease;
+}
+
+.exp-scroll-c.hidden-anim {
+  pointer-events: none;
+  transform: translateY(1.5rem);
+  opacity: 0;
+}
+
+.exp-scroll-c.visible-anim {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.exp-scroll-c .exp-dismiss-abs {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+}
+
+.exp-scroll-c {
+  position: fixed;
+}
+
+.exp-code {
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--exp-neutral-800);
+  background: rgb(0 0 0 / 0.4);
+  padding: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.25rem;
+  overflow-x: auto;
+}
+
+.exp-code .muted {
+  color: var(--exp-neutral-500);
+}
+
+.exp-code .cmd {
+  color: var(--exp-neutral-300);
+}
+
+.exp-code .accent {
+  color: var(--exp-emerald-400);
+}
+
+/* D — inline mid-content */
+.exp-slot-d {
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.exp-cta-d {
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.exp-cta-d-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0;
+}
+
+.exp-cta-d .exp-icon-tile {
+  margin: 0;
+}
+
+.exp-cta-d .exp-cta-title {
+  margin: 0.5rem 0 0;
+  line-height: 1.25rem;
+}
+
+.exp-cta-d .exp-cta-sub {
+  margin: 0.125rem 0 0;
+  line-height: 1.25rem;
+}
+
+.exp-cta-d-list {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0 0;
+  list-style: none;
+  border-top: 1px dashed color-mix(in srgb, var(--exp-white) 15%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.exp-cta-d-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  line-height: 1.25rem;
+  color: var(--exp-neutral-400);
+}
+
+.exp-cta-d-list .exp-icon {
+  color: var(--exp-emerald-400);
+}
+
+@media (min-width: 640px) {
+  .exp-cta-d {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .exp-cta-d .exp-btn-primary {
+    flex-shrink: 0;
+    width: 13rem;
+  }
+}
+
+/* Mobile panel adjustments */
+@media (max-width: 720px) {
+  .exp-panel {
+    left: 0.75rem;
+    right: 0.75rem;
+    top: auto;
+    bottom: 0.75rem;
+    width: auto;
+    max-height: min(70vh, 520px);
+    overflow: auto;
+  }
+
+  .exp-scroll-c {
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    max-width: none;
+    bottom: 5.5rem;
+  }
+}

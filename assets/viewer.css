@@ -1,0 +1,157 @@
+/* Viewer shell: experiment panel + desktop/mobile docs preview */
+
+html,
+body.exp-viewer {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+  color: #fff;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.exp-viewer {
+  display: flex;
+  align-items: stretch;
+}
+
+.exp-viewer-rail {
+  flex: 0 0 auto;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  padding: 1.25rem 0.75rem 1.25rem 1.25rem;
+  background: #0a0a0a;
+}
+
+/* Panel lives in the rail, not as a fixed overlay on the docs. */
+.exp-viewer .exp-panel {
+  position: static;
+  left: auto;
+  top: auto;
+  bottom: auto;
+  right: auto;
+  width: 18rem;
+  max-height: calc(100vh - 2.5rem);
+  overflow: auto;
+}
+
+.exp-viewer-stage {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 1rem 1rem 1rem 0.25rem;
+  background:
+    radial-gradient(circle at 20% 0%, #1a1a1a 0%, transparent 45%),
+    #111;
+}
+
+.exp-viewer-frame {
+  position: relative;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  transition: width 220ms ease, max-width 220ms ease, border-radius 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.exp-viewer-stage[data-device="desktop"] .exp-viewer-frame {
+  width: 100%;
+  max-width: none;
+  border-radius: 0.75rem;
+  border: 1px solid #262626;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.35);
+}
+
+.exp-viewer-stage[data-device="mobile"] {
+  justify-content: flex-start;
+  padding-left: 0.5rem;
+}
+
+.exp-viewer-stage[data-device="mobile"] .exp-viewer-frame {
+  /* Most common modern phone CSS width (iPhone 14/15 class) */
+  width: 390px;
+  max-width: calc(100% - 0.5rem);
+  border-radius: 1.25rem;
+  border: 1px solid #404040;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.04),
+    0 25px 60px rgb(0 0 0 / 0.55);
+}
+
+.exp-viewer-frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0b0b0b;
+}
+
+/* Device toggle inside the experiment panel */
+.exp-device {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--exp-neutral-800);
+}
+
+.exp-device-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.375rem;
+}
+
+.exp-device-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--exp-neutral-800);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--exp-neutral-400);
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+.exp-device-btn:hover {
+  border-color: var(--exp-neutral-700);
+  background: var(--exp-neutral-800);
+  color: var(--exp-white);
+}
+
+.exp-device-btn.active {
+  border-color: color-mix(in srgb, var(--exp-emerald-400) 50%, transparent);
+  background: color-mix(in srgb, var(--exp-emerald-400) 10%, transparent);
+  color: var(--exp-white);
+}
+
+.exp-device-meta {
+  margin: 0.5rem 0.25rem 0;
+  color: var(--exp-neutral-500);
+  font-size: 12px;
+}
+
+/* Disable the floating mobile panel reposition when we're in the shell rail. */
+@media (max-width: 720px) {
+  .exp-viewer .exp-panel {
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 18rem;
+    max-height: calc(100vh - 2.5rem);
+  }
+
+  .exp-viewer-rail {
+    padding: 0.75rem;
+  }
+
+  .exp-viewer-stage[data-device="mobile"] .exp-viewer-frame {
+    width: min(390px, 100%);
+  }
+}
