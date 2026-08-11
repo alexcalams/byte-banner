@@ -93,7 +93,10 @@
     panel.innerHTML = `
       <button type="button" class="exp-panel-toggle" data-exp="toggle">
         <span style="color:var(--exp-emerald-400);display:inline-flex">${ICONS.flask}</span>
-        <span>CTA Experiment Lab</span>
+        <span class="exp-panel-title">
+          CTA Experiments
+          <span class="exp-panel-pill">Alex Calams</span>
+        </span>
         ${ICONS.chevron}
       </button>
       <div class="exp-panel-body">

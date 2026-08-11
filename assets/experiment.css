@@ -123,8 +123,38 @@
   text-align: left;
 }
 
+.exp-panel-title {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.exp-panel-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--exp-emerald-400) 35%, var(--exp-neutral-700));
+  background: color-mix(in srgb, var(--exp-emerald-400) 12%, transparent);
+  color: var(--exp-emerald-300);
+  padding: 0.1rem 0.5rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
 .exp-panel-toggle:hover {
   background: var(--exp-neutral-800);
+}
+
+.exp-panel-toggle:hover .exp-panel-pill {
+  border-color: color-mix(in srgb, var(--exp-emerald-400) 55%, var(--exp-neutral-700));
+  background: color-mix(in srgb, var(--exp-emerald-400) 18%, transparent);
 }
 
 .exp-panel-toggle .exp-chevron {
