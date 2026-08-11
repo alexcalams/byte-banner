@@ -7,7 +7,7 @@
     { id: "A", name: "A · Above-the-fold banner", desc: "Inline under the H1" },
     { id: "B", name: "B · Sticky bottom bar", desc: "Persistent, dismissible" },
     { id: "C", name: "C · Scroll-depth card", desc: "Slides in past 40% depth" },
-    { id: "D", name: "D · Inline mid-content", desc: "In the reading flow" },
+    { id: "D", name: "D · Inline mid-content", desc: "Below Explore all in Voice quality" },
   ];
 
   const ICONS = {
@@ -333,9 +333,36 @@
     const voiceQuality = headings.find((h) =>
       /voice quality/i.test(h.textContent || "")
     );
+
     if (voiceQuality) {
+      // Prefer the "Explore all" control under the Voice quality model cards.
+      let scope = voiceQuality.parentElement;
+      while (scope) {
+        const explore = [...scope.querySelectorAll("a")].find((a) =>
+          /explore all/i.test((a.textContent || "").trim())
+        );
+        if (explore) {
+          const block =
+            explore.closest(".text-center") ||
+            explore.parentElement?.parentElement ||
+            explore.parentElement ||
+            explore;
+          if (
+            block?.parentElement &&
+            (voiceQuality.compareDocumentPosition(block) &
+              Node.DOCUMENT_POSITION_FOLLOWING) !==
+              0
+          ) {
+            return { parent: block.parentElement, after: block };
+          }
+        }
+        if (scope === document.body) break;
+        scope = scope.parentElement;
+      }
+      // Fallback: still land in the Voice quality area.
       return { parent: voiceQuality.parentElement, before: voiceQuality };
     }
+
     const faq = headings.find((h) => /^faq$/i.test((h.textContent || "").trim()));
     if (faq) return { parent: faq.parentElement, before: faq };
     const article = findArticleRoot();
@@ -374,7 +401,9 @@
     const anchor = findMidAnchor();
     if (!anchor || !anchor.parent) return;
     const el = buildCTA_D();
-    if (anchor.before && anchor.before.parentElement === anchor.parent) {
+    if (anchor.after && anchor.after.parentElement === anchor.parent) {
+      anchor.after.insertAdjacentElement("afterend", el);
+    } else if (anchor.before && anchor.before.parentElement === anchor.parent) {
       anchor.parent.insertBefore(el, anchor.before);
     } else {
       anchor.parent.appendChild(el);
