@@ -2,6 +2,8 @@
 
 Live ElevenLabs TTS docs with injectable CTA placement variants (Control, A–D) for conversion testing.
 
+**Live demo:** [https://byte-banner-production.up.railway.app/](https://byte-banner-production.up.railway.app/)
+
 ## Run locally
 
 ```bash
@@ -14,7 +16,7 @@ Requires Python 3 and network access (proxies `elevenlabs.io` and injects the ex
 
 ## Deploy
 
-This repo includes a `Dockerfile` and `render.yaml` for hosting. On Railway/Render, the app listens on `0.0.0.0:$PORT`.
+Hosted on Railway from this GitHub repo (`Dockerfile` + `HOST`/`PORT` env). `render.yaml` is also included if you prefer Render.
 
 ## Variants
 
