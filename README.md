@@ -29,3 +29,9 @@ Hosted on Railway from this GitHub repo (`Dockerfile` + `HOST`/`PORT` env). `ren
 | D | Inline before “Voice quality” |
 
 Use the left **CTA Experiment Lab** panel to switch variants and Desktop / Mobile (390px) preview.
+
+## ElevenAPI landing archetypes
+
+Experiment briefs for quickstart / pass-through and user-driven vs disruptive variants (paired with the live playground-first join.elevenlabs.io API LPs) live in:
+
+[docs/elevenapi-landing-archetype-experiment-matrix.md](docs/elevenapi-landing-archetype-experiment-matrix.md)
