@@ -7,7 +7,7 @@
     { id: "A", name: "A · Above-the-fold banner", desc: "Inline under the H1" },
     { id: "B", name: "B · Sticky bottom bar", desc: "Persistent, dismissible" },
     { id: "C", name: "C · Scroll-depth card", desc: "Slides in past 40% depth" },
-    { id: "D", name: "D · Inline mid-content", desc: "Below Explore all in Voice quality" },
+    { id: "D", name: "D · Inline mid-content", desc: "Below Supported output formats" },
   ];
 
   const ICONS = {
@@ -330,36 +330,41 @@
 
   function findMidAnchor() {
     const headings = [...document.querySelectorAll("h2, h3")];
+    const voiceOptions = headings.find((h) =>
+      /voice options/i.test(h.textContent || "")
+    );
+
+    // Prefer the "Supported output formats" accordion under Voice options.
+    const formatAccordion = [...document.querySelectorAll(".fern-accordion, details, [class*='accordion']")].find(
+      (el) => /supported output formats/i.test(el.textContent || "")
+    );
+    if (formatAccordion?.parentElement) {
+      return { parent: formatAccordion.parentElement, after: formatAccordion };
+    }
+
+    // Fallback: first accordion-like block after the Voice options heading.
+    if (voiceOptions?.parentElement) {
+      let node = voiceOptions.nextElementSibling;
+      while (node) {
+        const cls = (node.className || "").toString();
+        const text = node.textContent || "";
+        if (
+          /supported output formats/i.test(text) ||
+          cls.includes("accordion") ||
+          node.tagName === "DETAILS"
+        ) {
+          return { parent: node.parentElement, after: node };
+        }
+        if (/^H[1-6]$/.test(node.tagName)) break;
+        node = node.nextElementSibling;
+      }
+      return { parent: voiceOptions.parentElement, after: voiceOptions };
+    }
+
     const voiceQuality = headings.find((h) =>
       /voice quality/i.test(h.textContent || "")
     );
-
     if (voiceQuality) {
-      // Prefer the "Explore all" control under the Voice quality model cards.
-      let scope = voiceQuality.parentElement;
-      while (scope) {
-        const explore = [...scope.querySelectorAll("a")].find((a) =>
-          /explore all/i.test((a.textContent || "").trim())
-        );
-        if (explore) {
-          const block =
-            explore.closest(".text-center") ||
-            explore.parentElement?.parentElement ||
-            explore.parentElement ||
-            explore;
-          if (
-            block?.parentElement &&
-            (voiceQuality.compareDocumentPosition(block) &
-              Node.DOCUMENT_POSITION_FOLLOWING) !==
-              0
-          ) {
-            return { parent: block.parentElement, after: block };
-          }
-        }
-        if (scope === document.body) break;
-        scope = scope.parentElement;
-      }
-      // Fallback: still land in the Voice quality area.
       return { parent: voiceQuality.parentElement, before: voiceQuality };
     }
 
