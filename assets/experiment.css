@@ -137,8 +137,8 @@
   align-items: center;
   max-width: 100%;
   border-radius: 999px;
-  border: 1px solid var(--exp-neutral-800);
-  background: transparent;
+  border: 1px solid var(--exp-neutral-700);
+  background: #262626;
   color: var(--exp-neutral-400);
   padding: 0.1rem 0.5rem;
   font-size: 11px;
@@ -153,7 +153,8 @@
 }
 
 .exp-panel-toggle:hover .exp-panel-pill {
-  border-color: var(--exp-neutral-700);
+  border-color: var(--exp-neutral-500);
+  background: var(--exp-neutral-700);
   color: var(--exp-neutral-300);
 }
 
