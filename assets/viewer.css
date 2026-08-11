@@ -136,22 +136,83 @@ body.exp-viewer {
   font-size: 12px;
 }
 
-/* Disable the floating mobile panel reposition when we're in the shell rail. */
+/*
+ * Real phone / narrow browser: full-bleed docs (true device width),
+ * floating collapsible lab sheet. Desktop↔Mobile simulator is for
+ * desktop browsers only.
+ */
 @media (max-width: 720px) {
-  .exp-viewer .exp-panel {
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    width: 18rem;
-    max-height: calc(100vh - 2.5rem);
+  html,
+  body.exp-viewer {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  body.exp-viewer {
+    display: block;
+    position: relative;
   }
 
   .exp-viewer-rail {
-    padding: 0.75rem;
+    position: fixed;
+    z-index: 30;
+    inset: auto 0.75rem auto 0.75rem;
+    top: max(0.75rem, env(safe-area-inset-top, 0px));
+    bottom: auto;
+    padding: 0;
+    background: transparent;
+    pointer-events: none;
   }
 
+  .exp-viewer .exp-panel {
+    pointer-events: auto;
+    width: 100%;
+    max-width: none;
+    max-height: min(72dvh, 560px);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 18px 50px rgb(0 0 0 / 0.55);
+  }
+
+  .exp-viewer .exp-panel.collapsed {
+    max-height: none;
+    overflow: hidden;
+  }
+
+  /* Simulator toggle is for desktop; on a phone the iframe already is mobile. */
+  .exp-viewer .exp-device {
+    display: none;
+  }
+
+  .exp-viewer-stage,
+  .exp-viewer-stage[data-device="desktop"],
+  .exp-viewer-stage[data-device="mobile"] {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    justify-content: stretch;
+    align-items: stretch;
+    background: #0b0b0b;
+  }
+
+  .exp-viewer-stage .exp-viewer-frame,
+  .exp-viewer-stage[data-device="desktop"] .exp-viewer-frame,
   .exp-viewer-stage[data-device="mobile"] .exp-viewer-frame {
-    width: min(390px, 100%);
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .exp-viewer .exp-variant {
+    padding: 0.65rem 0.85rem;
+    min-height: 2.75rem;
+  }
+
+  .exp-viewer .exp-panel-toggle {
+    min-height: 2.75rem;
+    padding: 0.85rem 1rem;
   }
 }

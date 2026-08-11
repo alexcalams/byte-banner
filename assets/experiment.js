@@ -437,6 +437,11 @@
 
     if (isShell) {
       syncPanelActive();
+      // On real phones, tuck the lab away after a choice so docs stay readable.
+      if (isNativePhone() && nodes.panel && state.panelOpen) {
+        state.panelOpen = false;
+        nodes.panel.classList.add("collapsed");
+      }
       postToPreview({ type: "setVariant", variant: id });
       return;
     }
@@ -466,11 +471,36 @@
     }
   }
 
+  function isNativePhone() {
+    return window.matchMedia("(max-width: 720px)").matches;
+  }
+
+  function syncPhoneShellClass() {
+    document.body.classList.toggle("exp-viewer--phone", isNativePhone());
+  }
+
   function bootShell() {
     nodes.stage = document.querySelector(".exp-viewer-stage");
     nodes.iframe = document.getElementById("exp-preview");
     const host = document.getElementById("exp-panel-host");
+
+    // On a real phone, start with the lab collapsed so docs are full-bleed.
+    if (isNativePhone()) {
+      state.panelOpen = false;
+      state.device = "mobile";
+    }
+    syncPhoneShellClass();
+
     buildPanel(host);
+    if (!state.panelOpen && nodes.panel) {
+      nodes.panel.classList.add("collapsed");
+    }
+    syncDeviceUI();
+
+    const mq = window.matchMedia("(max-width: 720px)");
+    const onViewportChange = () => syncPhoneShellClass();
+    if (mq.addEventListener) mq.addEventListener("change", onViewportChange);
+    else mq.addListener(onViewportChange);
 
     window.addEventListener("message", (event) => {
       const data = event.data;
