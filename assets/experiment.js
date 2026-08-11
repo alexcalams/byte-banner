@@ -7,7 +7,7 @@
     { id: "A", name: "A · Above-the-fold banner", desc: "Inline under the H1" },
     { id: "B", name: "B · Sticky bottom bar", desc: "Persistent, dismissible" },
     { id: "C", name: "C · Scroll-depth card", desc: "Slides in past 40% depth" },
-    { id: "D", name: "D · Inline mid-content", desc: "Below Supported output formats" },
+    { id: "D", name: "D · Inline mid-content", desc: "In the reading flow" },
   ];
 
   const ICONS = {
