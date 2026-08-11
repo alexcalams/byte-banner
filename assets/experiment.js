@@ -244,7 +244,7 @@
       <div class="exp-dismiss-abs"></div>
       ${iconTile(ICONS.terminal)}
       <div class="exp-cta-title" style="margin-top:0.75rem">Still reading? Try it live.</div>
-      <p class="exp-cta-sub" style="margin-top:0.25rem">Skip the setup. Run this exact TTS example against your own key — free tier included.</p>
+      <p class="exp-cta-sub" style="margin-top:0.25rem">Skip the setup. Run this exact TTS example against your own key - free tier included.</p>
       <div class="exp-code"><span class="muted">$ </span><span class="cmd">curl -X POST </span><span class="accent">api.elevenlabs.io/v1/text-to-speech</span></div>
     `;
     card.querySelector(".exp-dismiss-abs").appendChild(
