@@ -12,6 +12,10 @@ Open [http://127.0.0.1:8765/](http://127.0.0.1:8765/).
 
 Requires Python 3 and network access (proxies `elevenlabs.io` and injects the experiment UI).
 
+## Deploy
+
+This repo includes a `Dockerfile` and `render.yaml` for hosting. On Railway/Render, the app listens on `0.0.0.0:$PORT`.
+
 ## Variants
 
 | ID | Placement |

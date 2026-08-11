@@ -1,0 +1,1 @@
+# Stdlib-only server; file present so Python hosts detect the runtime.

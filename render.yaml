@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: byte-banner
+    runtime: python
+    plan: free
+    buildCommand: "true"
+    startCommand: python server.py --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: HOST
+        value: "0.0.0.0"

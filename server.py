@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import mimetypes
+import os
 import ssl
 from http.client import HTTPResponse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -207,14 +208,23 @@ class Handler(BaseHTTPRequestHandler):
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument(
+        "--host",
+        default=os.environ.get("HOST", "127.0.0.1"),
+        help="Bind address (use 0.0.0.0 in production)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.environ.get("PORT", "8765")),
+        help="Listen port (hosts set PORT automatically)",
+    )
     args = parser.parse_args()
 
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(
-        f"CTA experiment on http://{args.host}:{args.port}{DEFAULT_DOCS_PATH}\n"
-        f"Proxying live docs from {DOCS_ORIGIN}"
+        f"CTA experiment on http://{args.host}:{args.port}/\n"
+        f"Proxying live docs from {DOCS_ORIGIN}{DEFAULT_DOCS_PATH}"
     )
     try:
         server.serve_forever()
