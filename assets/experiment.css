@@ -646,6 +646,12 @@
   .fern-header-navbar-links > a.fern-button.minimal {
     display: none !important;
   }
+
+  /* Drop theme toggle on tablet/mobile — Sign up + search need the room */
+  .fern-header-navbar-links > button:has(.lucide-sun),
+  .fern-header-navbar-links > button:has(.lucide-moon) {
+    display: none !important;
+  }
 }
 
 @media (max-width: 640px) {
