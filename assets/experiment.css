@@ -611,3 +611,46 @@
     bottom: 5.5rem;
   }
 }
+
+/*
+ * Docs header: keep Sign up visible at all breakpoints.
+ * Fern hides the whole navbar (including Sign up) below lg; we keep the
+ * nav visible, hide secondary links on small screens, and let search shrink.
+ */
+.fern-header-navbar-links {
+  display: flex !important;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.fern-header-content .fern-header-logo-container {
+  flex-shrink: 0;
+}
+
+.fern-header-content .fern-header-search-bar {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  overflow: hidden;
+}
+
+/* Search wrapper sits after the logo — force it to yield space to Sign up */
+.fern-header-content .fern-header-logo-container + div {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: min(640px, 100%);
+}
+
+@media (max-width: 1023px) {
+  .fern-header-navbar-links > .fern-button.minimal,
+  .fern-header-navbar-links > a.fern-button.minimal {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .fern-header-search-bar .fern-kbd,
+  .fern-header-search-bar .inline-flex.pointer-coarse\:hidden {
+    display: none !important;
+  }
+}
