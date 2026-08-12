@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Describe a voice. Get an ownable voice ID. · Voice Design API</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="description" content="ElevenAPI experiment variant vd-Q1" />
+  <link rel="icon" href="https://framerusercontent.com/images/7vs1s1ajFSteWsEkM5sFsuDeU.png" />
+  <link rel="stylesheet" href="/experiments/shared/design.css" />
+  
+</head>
+<body class="" data-variant="vd-Q1">
+
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/experiments/" >
+        <span class="brand-mark">11</span> ElevenLabs
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="/experiments/">Experiments</a>
+        <a class="nav-link" href="https://elevenlabs.io/docs" target="_blank" rel="noopener">Docs</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Voice Design API</p>
+        <h1>Describe a voice. Get an ownable voice ID.</h1>
+        <p class="lede">Text prompt in → brand-new voice out. Serve it on every ElevenAPI surface. 10K free credits.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://elevenlabs.io/app/developers/api-keys?utm_source=paid&amp;utm_medium=cpc&amp;utm_campaign=elevenapi_vd&amp;utm_content=vd-Q1&amp;archetype=quickstart&amp;product=vd&amp;variant_id=vd-Q1">Get your free API key</a>
+          <a class="text-link" href="https://elevenlabs.io/docs" target="_blank" rel="noopener">View docs</a>
+        </div>
+        <div class="trust-row">
+          <span>10K free credits / month</span>
+          <span>Full access to all APIs</span>
+          <span>SOC 2 Type 2 and ISO 27001</span>
+        </div>
+        
+      <div class="code-shell">
+        <div class="code-toolbar">
+          <div class="code-tabs"><button type="button" class="code-tab" data-tab="python" aria-selected="true">Python</button><button type="button" class="code-tab" data-tab="curl" aria-selected="false">cURL</button><button type="button" class="code-tab" data-tab="node" aria-selected="false">Node</button></div>
+          <button type="button" class="code-copy">Copy</button>
+        </div>
+        <p class="code-install">pip install elevenlabs</p>
+        <pre class="code-panel" data-panel="python" ><span class="c-key">from</span> elevenlabs <span class="c-key">import</span> ElevenLabs
+client = ElevenLabs(api_key=<span class="c-str">"sk_..."</span>)
+previews = client.text_to_voice.<span class="c-fn">design</span>(
+    voice_description=<span class="c-str">"Confident Indian male, stern but energetic"</span>,
+    text=<span class="c-str">"Your platform just found its voice."</span>,
+)  <span class="c-cm"># audition, then save the voice_id</span></pre><pre class="code-panel" data-panel="curl" hidden>curl -X POST <span class="c-str">"https://api.elevenlabs.io/v1/text-to-voice"</span> \
+  -H <span class="c-str">"xi-api-key: $ELEVENLABS_API_KEY"</span> \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -d <span class="c-str">'{"voice_description":"Warm mid-30s female narrator","text":"Your platform just found its voice."}'</span></pre><pre class="code-panel" data-panel="node" hidden><span class="c-key">import</span> { ElevenLabsClient } <span class="c-key">from</span> <span class="c-str">"elevenlabs"</span>;
+<span class="c-key">const</span> client = <span class="c-key">new</span> ElevenLabsClient({ apiKey: process.env.ELEVENLABS_API_KEY });
+<span class="c-key">const</span> previews = <span class="c-key">await</span> client.textToVoice.<span class="c-fn">design</span>({
+  voiceDescription: <span class="c-str">"Bubbly young female with a dynamic accent"</span>,
+  text: <span class="c-str">"Your platform just found its voice."</span>,
+});</pre>
+      </div>
+
+        <div class="logo-band">
+          <p>Trusted by engineers at the world’s leading brands</p>
+          <div class="logo-row">
+            <span>Deutsche Telekom</span><span>Codeway</span><span>Fortune 500</span><span>Global media</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap">
+        <h2>Three steps to first audio</h2>
+        <div class="steps cols-3">
+          <article class="step"><div class="step-num">1</div><h3>Get 10K free credits</h3><p>Sign up free. No credit card required.</p></article>
+          <article class="step"><div class="step-num">2</div><h3>Grab your API key</h3><p>Generate a key from the developers dashboard.</p></article>
+          <article class="step"><div class="step-num">3</div><h3>Paste the snippet</h3><p>One request — you’re live.</p></article>
+        </div>
+        <blockquote class="quote">
+          <p>Voices that sound natural and emotionally rich, backed by an API that’s solid and dependable.</p>
+          <cite>Cankut Kostur · Sr. Engineer, Codeway</cite>
+        </blockquote>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="https://elevenlabs.io/app/developers/api-keys?utm_source=paid&amp;utm_medium=cpc&amp;utm_campaign=elevenapi_vd&amp;utm_content=vd-Q1&amp;archetype=quickstart&amp;product=vd&amp;variant_id=vd-Q1">Get your free API key</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="sticky-cta" data-reveal-at="320">
+    <span>10K free credits · no credit card</span>
+    <a class="btn" href="https://elevenlabs.io/app/developers/api-keys?utm_source=paid&amp;utm_medium=cpc&amp;utm_campaign=elevenapi_vd&amp;utm_content=vd-Q1&amp;archetype=quickstart&amp;product=vd&amp;variant_id=vd-Q1">Get your free API key</a>
+  </div>
+
+
+  <footer class="footer-mini">
+    <div class="wrap">
+      <span>Experiment prototype · design language matched to join.elevenlabs.io</span>
+      <span>
+        <a href="https://elevenlabs.io/privacy-policy" target="_blank" rel="noopener">Privacy</a>
+        ·
+        <a href="https://elevenlabs.io/terms-of-use" target="_blank" rel="noopener">Terms</a>
+      </span>
+    </div>
+  </footer>
+
+
+  <div class="variant-tag" aria-hidden="true">vd-Q1</div>
+  <script src="/experiments/shared/app.js" defer></script>
+</body>
+</html>
