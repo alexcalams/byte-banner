@@ -615,16 +615,22 @@
 /*
  * Docs header: keep Sign up visible at all breakpoints.
  * Fern hides the whole navbar (including Sign up) below lg; we keep the
- * nav visible, hide secondary links on small screens, and let search shrink.
+ * nav visible, hide secondary links on small screens, and let search flex.
  */
 .fern-header-navbar-links {
   display: flex !important;
-  flex-shrink: 0;
+  flex: 0 0 auto !important;
   align-items: center;
+  width: fit-content !important;
+  max-width: max-content !important;
 }
 
 .fern-header-content .fern-header-logo-container {
   flex-shrink: 0;
+}
+
+.fern-header-content .fern-header-mobile-menu-button {
+  flex: 0 0 auto !important;
 }
 
 .fern-header-content .fern-header-search-bar {
@@ -633,7 +639,7 @@
   overflow: hidden;
 }
 
-/* Search wrapper sits after the logo — force it to yield space to Sign up */
+/* Search wrapper sits after the logo — take remaining free space */
 .fern-header-content .fern-header-logo-container + div {
   flex: 1 1 0% !important;
   min-width: 0 !important;
@@ -653,11 +659,22 @@
    */
   .fern-header-navbar-links > button.size-9,
   .fern-header-navbar-links > button.ml-2,
+  .fern-header-navbar-links > button,
   .fern-header-content button:has(.lucide-sun),
   .fern-header-content button:has(.lucide-moon),
   .fern-header-content button:has(.lucide-monitor),
   .fern-header-content button:has(.lucide-sun-moon) {
     display: none !important;
+  }
+
+  /* Use leftover header width for search (was sitting empty after Sign up) */
+  .fern-header-content .fern-header-logo-container + div {
+    flex: 1 1 auto !important;
+    max-width: none !important;
+  }
+
+  .fern-header-content .flex.w-full.items-center {
+    gap: 0.5rem !important;
   }
 }
 
