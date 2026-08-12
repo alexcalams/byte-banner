@@ -419,6 +419,12 @@
     const host = document.querySelector("elevenlabs-convai");
     if (!host) return;
 
+    // Keep agent under Fern search / mobile menu overlays.
+    const overlayOpen = document.documentElement.classList.contains(
+      "exp-chrome-overlay-open"
+    );
+    host.style.setProperty("z-index", overlayOpen ? "10" : "40", "important");
+
     const raised =
       state.variant === "B" && !state.dismissedB && nodes.stickyB?.isConnected;
 
@@ -433,6 +439,50 @@
     } else {
       host.style.removeProperty("bottom");
     }
+  }
+
+  function isChromeOverlayOpen() {
+    if (document.querySelector('[role="dialog"][data-state="open"]')) return true;
+    if (document.querySelector("[data-radix-dialog-overlay]")) return true;
+    if (document.querySelector('[data-vaul-drawer][data-state="open"]')) return true;
+
+    const searchBtn = document.getElementById("fern-search-button");
+    if (
+      searchBtn &&
+      (searchBtn.getAttribute("aria-expanded") === "true" ||
+        searchBtn.getAttribute("data-state") === "open")
+    ) {
+      return true;
+    }
+
+    const menuBtn = document.querySelector(
+      '.fern-header-mobile-menu-button button, button[aria-label="Open menu"], button[aria-label="Close menu"]'
+    );
+    if (
+      menuBtn &&
+      (menuBtn.getAttribute("aria-expanded") === "true" ||
+        menuBtn.getAttribute("data-state") === "open" ||
+        /close menu/i.test(menuBtn.getAttribute("aria-label") || ""))
+    ) {
+      return true;
+    }
+
+    for (const portal of document.querySelectorAll("[data-radix-portal]")) {
+      const dialog = portal.querySelector(
+        '[role="dialog"], [cmdk-dialog], [data-radix-dialog-content]'
+      );
+      if (!dialog) continue;
+      const rect = dialog.getBoundingClientRect();
+      if (rect.width > 80 && rect.height > 80) return true;
+    }
+
+    return false;
+  }
+
+  function syncChromeOverlayStack() {
+    const open = isChromeOverlayOpen();
+    document.documentElement.classList.toggle("exp-chrome-overlay-open", open);
+    syncHelpWidgetRaise();
   }
 
   function renderCTAs() {
@@ -558,6 +608,7 @@
     if (!isEmbed) buildPanel(document.documentElement);
     renderCTAs();
     updateScroll();
+    syncChromeOverlayStack();
 
     window.addEventListener("scroll", updateScroll, { passive: true });
     window.addEventListener(
@@ -565,9 +616,24 @@
       () => {
         updateScroll();
         syncHelpWidgetRaise();
+        syncChromeOverlayStack();
       },
       { passive: true }
     );
+    document.addEventListener("click", () => {
+      // Search / menu open asynchronously after the click.
+      requestAnimationFrame(() => {
+        syncChromeOverlayStack();
+        setTimeout(syncChromeOverlayStack, 50);
+        setTimeout(syncChromeOverlayStack, 200);
+      });
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" || event.key === "/" || event.key === "k") {
+        requestAnimationFrame(syncChromeOverlayStack);
+        setTimeout(syncChromeOverlayStack, 50);
+      }
+    });
 
     if (isEmbed) {
       window.addEventListener("message", (event) => {
@@ -589,14 +655,21 @@
         document.documentElement.appendChild(nodes.panel);
       }
       syncHelpWidgetRaise();
+      syncChromeOverlayStack();
     });
-    mo.observe(document.documentElement, { childList: true, subtree: true });
+    mo.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["data-state", "aria-expanded", "class", "style"],
+    });
 
     let tries = 0;
     const timer = setInterval(() => {
       tries += 1;
       if (state.variant === "A" || state.variant === "D") renderCTAs();
       syncHelpWidgetRaise();
+      syncChromeOverlayStack();
       if (tries >= 10) clearInterval(timer);
     }, 500);
   }

@@ -96,7 +96,7 @@
   position: fixed;
   left: 1.25rem;
   top: 5rem;
-  z-index: 2147483000;
+  z-index: 60;
   width: 18rem;
   overflow: hidden;
   border-radius: 1rem;
@@ -334,7 +334,7 @@
   position: fixed;
   inset-inline: 0;
   bottom: 0;
-  z-index: 2147482900;
+  z-index: 45;
   container-type: inline-size;
   container-name: exp-sticky-b;
   border-top: 1px solid var(--exp-neutral-800);
@@ -464,7 +464,7 @@
   position: fixed;
   right: 1.25rem;
   bottom: 1.25rem;
-  z-index: 2147482900;
+  z-index: 45;
   width: 360px;
   max-width: calc(100vw - 2.5rem);
   border-radius: 1rem;
@@ -683,4 +683,29 @@
   .fern-header-search-bar .inline-flex.pointer-coarse\:hidden {
     display: none !important;
   }
+}
+
+/*
+ * Stacking: agent widget + experiment CTAs sit above page chrome,
+ * but below Fern search / mobile menu overlays (Radix portals).
+ */
+elevenlabs-convai {
+  z-index: 40 !important;
+}
+
+html.exp-chrome-overlay-open elevenlabs-convai,
+html.exp-chrome-overlay-open .exp-sticky-b,
+html.exp-chrome-overlay-open .exp-scroll-c {
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+
+/* Keep search / mobile nav sheets above the agent on mobile */
+[data-radix-portal],
+[data-radix-popper-content-wrapper],
+[data-vaul-drawer],
+[data-vaul-overlay],
+div[role="dialog"],
+div[role="alertdialog"] {
+  z-index: 100000 !important;
 }
