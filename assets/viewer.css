@@ -136,6 +136,13 @@ body.exp-viewer {
   font-size: 12px;
 }
 
+/* Simulator toggle is for wide desktop shells only */
+@media (max-width: 1023px) {
+  .exp-viewer .exp-device {
+    display: none !important;
+  }
+}
+
 /*
  * Real phone / narrow browser: full-bleed docs (true device width),
  * floating collapsible lab sheet. Desktop↔Mobile simulator is for
@@ -177,11 +184,6 @@ body.exp-viewer {
   .exp-viewer .exp-panel.collapsed {
     max-height: none;
     overflow: hidden;
-  }
-
-  /* Simulator toggle is for desktop; on a phone the iframe already is mobile. */
-  .exp-viewer .exp-device {
-    display: none;
   }
 
   .exp-viewer-stage,

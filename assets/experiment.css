@@ -647,9 +647,16 @@
     display: none !important;
   }
 
-  /* Drop theme toggle on tablet/mobile — Sign up + search need the room */
-  .fern-header-navbar-links > button:has(.lucide-sun),
-  .fern-header-navbar-links > button:has(.lucide-moon) {
+  /*
+   * Theme / appearance control in the docs header (sun/moon/monitor trigger).
+   * Prefer class-based hide — icon markup can change after hydration.
+   */
+  .fern-header-navbar-links > button.size-9,
+  .fern-header-navbar-links > button.ml-2,
+  .fern-header-content button:has(.lucide-sun),
+  .fern-header-content button:has(.lucide-moon),
+  .fern-header-content button:has(.lucide-monitor),
+  .fern-header-content button:has(.lucide-sun-moon) {
     display: none !important;
   }
 }
