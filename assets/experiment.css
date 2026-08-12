@@ -709,3 +709,18 @@ div[role="dialog"],
 div[role="alertdialog"] {
   z-index: 100000 !important;
 }
+
+/* Fern mobile menu reuses the sidebar as a sheet — force it above the agent */
+@media (max-width: 1023px) {
+  html.exp-chrome-overlay-open #fern-sidebar,
+  html.exp-chrome-overlay-open .fern-sidebar-desktop,
+  html.exp-chrome-overlay-open .fern-header,
+  html.exp-chrome-overlay-open .fern-header-content {
+    z-index: 100000 !important;
+  }
+
+  html.exp-chrome-overlay-open elevenlabs-convai {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+}

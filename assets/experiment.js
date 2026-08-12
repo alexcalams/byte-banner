@@ -455,16 +455,49 @@
       return true;
     }
 
-    const menuBtn = document.querySelector(
-      '.fern-header-mobile-menu-button button, button[aria-label="Open menu"], button[aria-label="Close menu"]'
-    );
-    if (
-      menuBtn &&
-      (menuBtn.getAttribute("aria-expanded") === "true" ||
-        menuBtn.getAttribute("data-state") === "open" ||
-        /close menu/i.test(menuBtn.getAttribute("aria-label") || ""))
-    ) {
-      return true;
+    // Mobile hamburger → X means the nav sheet is open (Fern keeps this in-header).
+    const menuBtn = document.querySelector(".fern-header-mobile-menu-button button");
+    if (menuBtn) {
+      const label = menuBtn.getAttribute("aria-label") || "";
+      if (/close/i.test(label)) return true;
+      if (menuBtn.querySelector(".lucide-x, svg.lucide-x")) return true;
+      if (
+        menuBtn.getAttribute("aria-expanded") === "true" ||
+        menuBtn.getAttribute("data-state") === "open"
+      ) {
+        return true;
+      }
+    }
+
+    // Fern mobile nav reuses #fern-sidebar as an overlay sheet.
+    const sidebar = document.getElementById("fern-sidebar");
+    if (sidebar) {
+      const viewport = (sidebar.getAttribute("data-viewport") || "").toLowerCase();
+      if (viewport && viewport !== "desktop") return true;
+      const state = (sidebar.getAttribute("data-state") || "").toLowerCase();
+      if (state === "open" || state === "opened" || state === "visible") return true;
+      if (
+        sidebar.classList.contains("open") ||
+        sidebar.classList.contains("is-open") ||
+        sidebar.dataset.open === "true"
+      ) {
+        return true;
+      }
+      // Heuristic: on small screens, a near-fullscreen fixed/absolute sidebar is open.
+      if (window.innerWidth < 1024) {
+        const style = getComputedStyle(sidebar);
+        const rect = sidebar.getBoundingClientRect();
+        const covers =
+          rect.width > window.innerWidth * 0.55 &&
+          rect.height > window.innerHeight * 0.55 &&
+          rect.left < window.innerWidth * 0.2;
+        const shown =
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          style.opacity !== "0" &&
+          (style.position === "fixed" || style.position === "absolute" || covers);
+        if (covers && shown) return true;
+      }
     }
 
     for (const portal of document.querySelectorAll("[data-radix-portal]")) {
@@ -482,6 +515,17 @@
   function syncChromeOverlayStack() {
     const open = isChromeOverlayOpen();
     document.documentElement.classList.toggle("exp-chrome-overlay-open", open);
+
+    // Ensure the mobile sidebar sheet stacks above the agent while open.
+    const sidebar = document.getElementById("fern-sidebar");
+    if (sidebar) {
+      if (open && window.innerWidth < 1024) {
+        sidebar.style.setProperty("z-index", "100000", "important");
+      } else {
+        sidebar.style.removeProperty("z-index");
+      }
+    }
+
     syncHelpWidgetRaise();
   }
 
