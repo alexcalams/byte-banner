@@ -99,6 +99,10 @@ class Handler(BaseHTTPRequestHandler):
             self._serve_root(body=body)
             return
 
+        if path in {"/whitepaper", "/whitepaper/", "/whitepaper.html"}:
+            self._serve_file(ROOT / "whitepaper.html", "text/html; charset=utf-8", body=body)
+            return
+
         if path.startswith("/__experiment/"):
             self._serve_local(path[len("/__experiment/") :], body=body)
             return
@@ -111,10 +115,12 @@ class Handler(BaseHTTPRequestHandler):
         self._proxy(body=body)
 
     def _serve_root(self, body: bool = True) -> None:
-        file_path = ROOT / "index.html"
+        self._serve_file(ROOT / "index.html", "text/html; charset=utf-8", body=body)
+
+    def _serve_file(self, file_path: Path, content_type: str, body: bool = True) -> None:
         data = file_path.read_bytes()
         self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-cache")
         self.end_headers()
