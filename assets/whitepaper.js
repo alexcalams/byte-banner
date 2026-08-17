@@ -202,6 +202,7 @@
     }
     if (isPreview) {
       document.body.dataset.variant = id;
+      syncPreviewLayout();
       measurePreview();
       if (!fromParent) postToParent({ type: "variant", variant: id });
     }
@@ -219,6 +220,21 @@
 
   function syncPhoneShellClass() {
     document.body.classList.toggle("exp-viewer--phone", isNativePhone());
+  }
+
+  function syncPreviewLayout() {
+    const body = document.querySelector("[data-wp='body']");
+    const scope = document.querySelector(".wp-scope");
+    const hero = document.querySelector(".wp-hero");
+    const spacer = document.querySelector(".wp-pin-spacer");
+    if (!body || !scope || !hero) return;
+
+    if (state.variant === "proposed") {
+      scope.appendChild(body);
+      if (spacer) scope.appendChild(spacer);
+    } else {
+      scope.insertAdjacentElement("afterend", body);
+    }
   }
 
   function measurePreview() {
@@ -307,6 +323,7 @@
     const params = new URLSearchParams(location.search);
     if (params.get("variant") === "current") state.variant = "current";
     document.body.dataset.variant = state.variant;
+    syncPreviewLayout();
 
     measurePreview();
     window.addEventListener("scroll", measurePreview, { passive: true });

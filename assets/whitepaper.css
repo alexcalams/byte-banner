@@ -99,7 +99,7 @@ body.wp-page {
 
 .wp-hero {
   padding: 52px 0 0;
-  overflow: clip;
+  overflow: visible;
 }
 
 .wp-intro {
@@ -133,18 +133,16 @@ body.wp-page {
   color: #3f3f3f;
 }
 
-/* Cover + form pair. Current: this is the sticky containing block. */
-.wp-hero-pair {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  overflow: clip;
+.wp-scope {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--wp-form-w);
+  align-items: start;
+  overflow: visible;
 }
 
 .wp-cover {
-  flex: 1 1 auto;
-  min-width: 60%;
-  max-width: 710px;
+  min-width: 0;
+  width: 100%;
   height: 560px;
   position: relative;
   background: #000;
@@ -206,14 +204,16 @@ body.wp-page {
   color: #767676;
 }
 
-.wp-form {
-  flex: 0 0 var(--wp-form-w);
+.wp-form-rail {
   width: var(--wp-form-w);
+}
+
+.wp-form {
+  width: 100%;
   background: #fff;
   border: 1px solid #f2f2f2;
   border-radius: 20px;
   padding: 32px;
-  align-self: flex-start;
 }
 
 .wp-form h3 {
@@ -356,66 +356,63 @@ body.wp-page {
   margin-left: 12px;
 }
 
-/* —— Current: sticky to the header, trapped in the short hero pair —— */
+/* —— Current: title + cover are the sticky parent. Form starts beside
+     the cover, climbs under the nav, then unsticks before the body. —— */
+[data-variant="current"] .wp-intro {
+  grid-column: 1;
+  grid-row: 1;
+}
+[data-variant="current"] .wp-cover {
+  grid-column: 1;
+  grid-row: 2;
+}
+[data-variant="current"] .wp-form-rail {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 [data-variant="current"] .wp-form {
   position: sticky;
   top: var(--wp-header-h);
 }
-
-/* —— Proposed: form lives in a rail that includes the body, pins to the
-     body-heading line (not the nav), and can internally scroll if tall. —— */
-[data-variant="proposed"] .wp-hero,
-[data-variant="proposed"] .wp-hero-pair,
-[data-variant="proposed"] .wp-body {
-  overflow: visible;
+[data-variant="current"] .wp-pin-spacer {
+  display: none;
 }
 
-[data-variant="proposed"] .wp-pin-root {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--wp-form-w);
-  align-items: start;
-  overflow: visible;
+/* —— Proposed: cover + body share one parent with the form. Form top
+     stops at the body-heading line, not the nav. —— */
+[data-variant="proposed"] .wp-intro {
+  grid-column: 1 / -1;
+  grid-row: 1;
 }
-
-[data-variant="proposed"] .wp-hero-pair {
-  display: contents;
-}
-
 [data-variant="proposed"] .wp-cover {
   grid-column: 1;
-  grid-row: 1;
-  max-width: none;
-  width: 100%;
+  grid-row: 2;
 }
-
-[data-variant="proposed"] .wp-form {
+[data-variant="proposed"] .wp-form-rail {
   grid-column: 2;
-  grid-row: 1 / span 3;
+  grid-row: 2 / span 3;
+  align-self: stretch;
+}
+[data-variant="proposed"] .wp-form {
   position: sticky;
   top: var(--wp-pin-top);
   max-height: calc(100vh - var(--wp-pin-top) - 16px);
   overflow-y: auto;
-  align-self: start;
 }
-
 [data-variant="proposed"] .wp-body {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
   padding-top: 32px;
   border-top: 0;
 }
-
 [data-variant="proposed"] .wp-pin-spacer {
   grid-column: 1;
-  grid-row: 3;
-  /* Extra left-column height so sticky can hold through the body
-     instead of dying when the short details block ends. */
+  grid-row: 4;
   min-height: 220px;
-}
-
-[data-variant="proposed"] .wp-cta,
-[data-variant="proposed"] .wp-footer {
-  grid-column: 1 / -1;
 }
 
 /* Alignment guide — proposed only */
@@ -456,21 +453,17 @@ body.wp-page {
 }
 
 @media (max-width: 991.98px) {
-  .wp-hero-pair,
-  [data-variant="proposed"] .wp-pin-root,
-  [data-variant="proposed"] .wp-hero-pair {
+  .wp-scope {
     display: flex;
     flex-direction: column;
   }
 
-  .wp-cover,
-  [data-variant="proposed"] .wp-cover {
+  .wp-cover {
     width: 100%;
-    max-width: none;
-    min-width: 0;
     height: 420px;
   }
 
+  .wp-form-rail,
   .wp-form,
   [data-variant="current"] .wp-form,
   [data-variant="proposed"] .wp-form {
@@ -478,12 +471,6 @@ body.wp-page {
     top: auto;
     width: 100%;
     max-height: none;
-    flex: none;
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  [data-variant="proposed"] .wp-body {
     grid-column: auto;
     grid-row: auto;
   }
