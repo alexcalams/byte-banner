@@ -103,6 +103,13 @@ body.exp-viewer {
   gap: 0.375rem;
 }
 
+/* Theme toggle sits under Viewport; keep it available on phone too */
+.exp-theme {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--exp-neutral-800);
+}
+
 .exp-device-btn {
   display: inline-flex;
   align-items: center;

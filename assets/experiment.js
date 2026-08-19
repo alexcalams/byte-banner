@@ -19,6 +19,8 @@
     check: `<svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
     desktop: `<svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`,
     mobile: `<svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>`,
+    sun: `<svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`,
+    moon: `<svg class="exp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
   };
 
   const isShell = document.body?.classList?.contains("exp-viewer");
@@ -29,6 +31,7 @@
   const state = {
     variant: "A",
     device: "desktop",
+    theme: "light",
     panelOpen: true,
     scrollDepth: 0,
     dismissedB: false,
@@ -112,6 +115,17 @@
           </div>
           <p class="exp-device-meta" data-exp="device-meta">Full-width preview</p>
         </div>
+        <div class="exp-theme">
+          <div class="exp-label">Theme</div>
+          <div class="exp-device-toggle" data-exp="themes">
+            <button type="button" class="exp-device-btn active" data-theme="light">
+              ${ICONS.sun}<span style="margin-left:0.35rem">Light</span>
+            </button>
+            <button type="button" class="exp-device-btn" data-theme="dark">
+              ${ICONS.moon}<span style="margin-left:0.35rem">Dark</span>
+            </button>
+          </div>
+        </div>
         <div class="exp-label">Active variant</div>
         <div class="exp-variants" data-exp="variants"></div>
         <div class="exp-scroll-meta">
@@ -141,6 +155,10 @@
       btn.addEventListener("click", () => setDevice(btn.dataset.device));
     });
 
+    panel.querySelectorAll("[data-theme]").forEach((btn) => {
+      btn.addEventListener("click", () => setTheme(btn.dataset.theme));
+    });
+
     panel.querySelector('[data-exp="toggle"]').addEventListener("click", () => {
       state.panelOpen = !state.panelOpen;
       panel.classList.toggle("collapsed", !state.panelOpen);
@@ -154,6 +172,7 @@
     (mount || document.documentElement).appendChild(panel);
     syncPanelActive();
     syncDeviceUI();
+    syncThemeUI();
   }
 
   function syncPanelActive() {
@@ -165,7 +184,7 @@
 
   function syncDeviceUI() {
     if (!nodes.panel) return;
-    nodes.panel.querySelectorAll(".exp-device-btn").forEach((btn) => {
+    nodes.panel.querySelectorAll("[data-device]").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.device === state.device);
     });
     if (nodes.stage) nodes.stage.dataset.device = state.device;
@@ -182,6 +201,44 @@
     if (state.device === device) return;
     state.device = device;
     syncDeviceUI();
+  }
+
+  function syncThemeUI() {
+    if (!nodes.panel) return;
+    nodes.panel.querySelectorAll("[data-theme]").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.theme === state.theme);
+    });
+  }
+
+  function applyDocsTheme(theme) {
+    if (theme !== "light" && theme !== "dark") return;
+    const root = document.documentElement;
+    root.classList.remove("light", "dark");
+    root.classList.add(theme);
+    root.style.colorScheme = theme;
+    try {
+      localStorage.setItem("theme", theme);
+    } catch (_) {
+      /* ignore quota / private mode */
+    }
+  }
+
+  function setTheme(theme, { fromParent = false } = {}) {
+    if (theme !== "light" && theme !== "dark") return;
+    if (state.theme === theme && fromParent) {
+      if (!isShell) applyDocsTheme(theme);
+      return;
+    }
+    if (state.theme === theme) return;
+    state.theme = theme;
+    syncThemeUI();
+
+    if (isShell && !fromParent) {
+      postToPreview({ type: "setTheme", theme });
+      return;
+    }
+
+    applyDocsTheme(theme);
   }
 
   function buildCTA_A() {
@@ -639,17 +696,40 @@
       if (data.type === "scroll") applyScrollDepth(data.depth);
       if (data.type === "ready") {
         postToPreview({ type: "setVariant", variant: state.variant });
+        postToPreview({ type: "setTheme", theme: state.theme });
       }
     });
 
     nodes.iframe?.addEventListener("load", () => {
       postToPreview({ type: "setVariant", variant: state.variant });
+      postToPreview({ type: "setTheme", theme: state.theme });
     });
+  }
+
+  function detectDocsTheme() {
+    const root = document.documentElement;
+    if (root.classList.contains("dark")) return "dark";
+    if (root.classList.contains("light")) return "light";
+    try {
+      const stored = localStorage.getItem("theme");
+      if (stored === "dark" || stored === "light") return stored;
+      if (stored === "system") {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      }
+    } catch (_) {
+      /* ignore */
+    }
+    return "light";
   }
 
   function bootDocs() {
     // Direct docs visit (not in shell): show floating panel + CTAs.
     if (!isEmbed) buildPanel(document.documentElement);
+    state.theme = detectDocsTheme();
+    syncThemeUI();
+    applyDocsTheme(state.theme);
     renderCTAs();
     updateScroll();
     syncChromeOverlayStack();
@@ -684,6 +764,7 @@
         const data = event.data;
         if (!data || data.source !== "cta-experiment") return;
         if (data.type === "setVariant") setVariant(data.variant, { fromParent: true });
+        if (data.type === "setTheme") setTheme(data.theme, { fromParent: true });
       });
       postToParent({ type: "ready" });
     }
